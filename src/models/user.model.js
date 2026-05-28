@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
     index: true,
   },
   avatar: {
-    type: String, // Google profile picture URL
+    type: String, 
   },
   username: {
     type: String,

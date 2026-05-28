@@ -2,6 +2,7 @@ const { Router } = require("express");
 const {registerController, loginController, getMe, logout } = require("../controllers/auth.controller");
 const authUser = require("../Middlewares/auth.middleware");
 const passport = require('passport');
+const generateToken = require("../utils/generateToken");
 
 const userRouter = Router();
 
@@ -18,7 +19,15 @@ userRouter.get('/google',
 userRouter.get('/google/callback',
   passport.authenticate('google', { session: false, failureRedirect: `${process.env.CLIENT_URL}/login?error=google_failed` }),
   (req, res) => {
-    sendToken(res, req.user);
+    const token = generateToken(req.user);   
+
+    res.cookie('token', token, {             
+      httpOnly: true,
+      secure:   process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge:   3 * 24 * 60 * 60 * 1000,
+    });
+
     res.redirect(`${process.env.CLIENT_URL}/`);
   }
 );
