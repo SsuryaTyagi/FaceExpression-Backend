@@ -30,7 +30,7 @@ passport.use(
 
         
         user = await User.create({
-          name:     profile.displayName,
+          username:     profile.displayName,
           email:    profile.emails[0].value,
           googleId: profile.id,
           avatar:   profile.photos[0]?.value || '',

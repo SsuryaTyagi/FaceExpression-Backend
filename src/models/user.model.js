@@ -3,16 +3,19 @@ const mongoose = require("mongoose");
 const userSchema = new mongoose.Schema({
   googleId: {
     type: String,
-    required: true,
+    required: false,
     unique: true,
+    sparse: true, 
     index: true,
   },
   avatar: {
-    type: String, 
+    type: String,
   },
   username: {
     type: String,
-    required: function () { return !this.googleId; },
+    required: function () {
+      return !this.googleId;
+    },
     unique: [true, "username is already exists"],
   },
   email: {
@@ -22,7 +25,9 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: function () { return !this.googleId; },
+    required: function () {
+      return !this.googleId;
+    },
     select: false,
   },
 });
