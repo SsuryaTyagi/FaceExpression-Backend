@@ -2,7 +2,7 @@ require("dotenv").config();
 const userModel = require("../models/user.model");
 const bcrypt = require("bcrypt");
 const generateToken = require("../utils/generateToken");
-const redis = require("../config/cache")
+const redis = require("../config/cache");
 
 const registerController = async (req, res) => {
   try {
@@ -54,18 +54,20 @@ const registerController = async (req, res) => {
 const loginController = async (req, res) => {
   try {
     const { username, email, password } = req.body;
-    
- console.log(email,password);
- 
+
+    console.log(email, password);
+
     if ((!username && !email) || !password) {
       return res.status(400).json({
         message: "All fields are required",
       });
     }
 
-    const User = await userModel.findOne({
-      $or: [{ username: username }, { email: email }],
-    }).select("+password");
+    const User = await userModel
+      .findOne({
+        $or: [{ username: username }, { email: email }],
+      })
+      .select("+password");
 
     if (!User) {
       return res.status(404).json({
@@ -82,7 +84,12 @@ const loginController = async (req, res) => {
     }
 
     const token = generateToken(User);
-    res.cookie("token", token);
+    res.cookie("token", token, {
+      httpOnly: true,
+      sameSite: "lax", 
+      secure: false, 
+      maxAge: 7 * 24 * 60 * 60 * 1000, 
+    });
 
     res.status(200).json({
       message: "user successfully login",
@@ -99,30 +106,29 @@ const loginController = async (req, res) => {
   }
 };
 
-const getMe = async (req,res)=>{
-  const user = await userModel.findById(req.user.id)
+const getMe = async (req, res) => {
+  const user = await userModel.findById(req.user.id);
 
   res.status(200).json({
-    message:"User fetched successfully",
+    message: "User fetched successfully",
     user,
-  })
+  });
+};
+const logout = async (req, res) => {
+  const token = req.cookies.token;
 
-}
-const logout = async (req, res)=>{
-  const token = req.cookies.token
+  res.clearCookie("token");
 
-  res.clearCookie("token")
-
-  await redis.set("token",Date.now().toString())
+  await redis.set(token, Date.now().toString());
 
   res.status(200).json({
-    message:"logout successfully",
-  })
-}
+    message: "logout successfully",
+  });
+};
 
 module.exports = {
   registerController,
   loginController,
   getMe,
-  logout
+  logout,
 };

@@ -11,7 +11,7 @@ const authUser = async (req, res, next) => {
     });
   }
 
-  const isTokenBlackListing = await redis.get("token")
+  const isTokenBlackListing = await redis.get(token) 
 
   if (isTokenBlackListing) {
     return res.status(401).json({
