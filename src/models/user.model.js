@@ -5,7 +5,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: false,
     unique: true,
-    sparse: true, 
+    sparse: true,
     index: true,
   },
   avatar: {
@@ -30,6 +30,7 @@ const userSchema = new mongoose.Schema({
     },
     select: false,
   },
+  verified: { type: Boolean, default: false },
 });
 
 const userModel = mongoose.model("user", userSchema);

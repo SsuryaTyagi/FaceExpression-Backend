@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const {registerController, loginController, getMe, logout } = require("../controllers/auth.controller");
+const {registerController, loginController, getMe, logout, VerifyEmailController } = require("../controllers/auth.controller");
 const authUser = require("../Middlewares/auth.middleware");
 const passport = require('passport');
 const generateToken = require("../utils/generateToken");
@@ -10,6 +10,7 @@ userRouter.post("/register", registerController);
 userRouter.post("/login", loginController);
 userRouter.get("/getMe", authUser, getMe);
 userRouter.post("/logout", logout)
+userRouter.get("/verify-email/:token", VerifyEmailController);
 
 userRouter.get('/google',
   passport.authenticate('google', { scope: ['profile', 'email'], prompt: 'select_account' })
