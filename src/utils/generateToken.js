@@ -8,7 +8,7 @@ const generateToken = (user) => {
   );
 };
 const verifyVerificationToken = (token) => {
-  return jwt.verify(token, process.env.JWT_TOKEN_SECRET);
+  return jwt.verify(token, process.env.JWT_SECRET);
 };
 
 module.exports = { generateToken, verifyVerificationToken };

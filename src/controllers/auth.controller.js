@@ -1,6 +1,7 @@
 require("dotenv").config();
 const userModel = require("../models/user.model");
 const bcrypt = require("bcrypt");
+const { sendVerificationEmail } = require("../services/email.service.js");
 const {
   generateToken,
   verifyVerificationToken,
@@ -38,8 +39,8 @@ const registerController = async (req, res) => {
       verified: false,
     });
 
-    const token = generateToken(email);
-    await sendVerificationEmail(email, name, token);
+    const token = generateToken(user);
+    await sendVerificationEmail(email, username, token);
 
     return res
       .status(201)
@@ -74,6 +75,9 @@ const loginController = async (req, res) => {
         message: "user not found.",
       });
     }
+    console.log("User:", User);
+    console.log("Verified Value:", User.verified);
+    console.log("Type:", typeof User.verified);
     if (!User.verified) {
       return res
         .status(403)
@@ -136,7 +140,7 @@ const VerifyEmailController = async (req, res) => {
     const { token } = req.params;
     const decoded = verifyVerificationToken(token);
 
-    const user = await userModel.findOne({ email: decoded.email });
+    const user = await userModel.findOne({ _id: decoded.id });
     if (!user) return res.status(400).json({ message: "Invalid link" });
     if (user.verified)
       return res.status(400).json({ message: "Already verified" });
@@ -157,5 +161,5 @@ module.exports = {
   loginController,
   getMe,
   logout,
-  VerifyEmailController
+  VerifyEmailController,
 };
