@@ -2,7 +2,7 @@ const { Router } = require("express");
 const {registerController, loginController, getMe, logout, VerifyEmailController } = require("../controllers/auth.controller");
 const authUser = require("../Middlewares/auth.middleware");
 const passport = require('passport');
-const generateToken = require("../utils/generateToken");
+const {generateToken} = require("../utils/generateToken");
 
 const userRouter = Router();
 
