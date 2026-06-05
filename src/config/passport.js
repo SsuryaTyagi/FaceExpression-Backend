@@ -34,6 +34,7 @@ passport.use(
           email:    profile.emails[0].value,
           googleId: profile.id,
           avatar:   profile.photos[0]?.value || '',
+          verified: true
         });
 
         return done(null, user);

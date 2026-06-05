@@ -56,7 +56,7 @@ const loginController = async (req, res) => {
   try {
     const { username, email, password } = req.body;
 
-    console.log(email, password);
+    // console.log(email, password);
 
     if ((!username && !email) || !password) {
       return res.status(400).json({
@@ -64,20 +64,21 @@ const loginController = async (req, res) => {
       });
     }
 
-    const User = await userModel
-      .findOne({
-        $or: [{ username: username }, { email: email }],
-      })
-      .select("+password");
+    const query = [];
+    if (email) query.push({ email });
+    if (username) query.push({ username });
+
+    const User = await userModel.findOne({ $or: query }).select("+password");
 
     if (!User) {
       return res.status(404).json({
         message: "user not found.",
       });
     }
-    console.log("User:", User);
-    console.log("Verified Value:", User.verified);
-    console.log("Type:", typeof User.verified);
+    // console.log("User:", User);
+    // console.log("Verified Value:", User.verified);
+    // console.log("Type:", typeof User.verified);
+    
     if (!User.verified) {
       return res
         .status(403)
