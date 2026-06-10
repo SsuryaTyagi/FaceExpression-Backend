@@ -8,13 +8,20 @@ const userSchema = new mongoose.Schema({
     sparse: true,
     index: true,
   },
+  githubId: {          // ✅ GitHub ke liye add karo
+    type: String,
+    required: false,
+    unique: true,
+    sparse: true,
+    index: true,
+  },
   avatar: {
     type: String,
   },
   username: {
     type: String,
     required: function () {
-      return !this.googleId;
+      return !this.googleId && !this.githubId; 
     },
     unique: [true, "username is already exists"],
   },
@@ -26,7 +33,7 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: function () {
-      return !this.googleId;
+      return !this.googleId && !this.githubId; 
     },
     select: false,
   },

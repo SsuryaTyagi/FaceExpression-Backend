@@ -37,10 +37,10 @@ const songUploadController = async (req, res) => {
       );
     }
 
-    // 🚀 Run both in parallel
+
     const results = await Promise.all(uploadPromises);
 
-    // 🎯 Extract results
+
     const songFile = results[0];
     let posterUrl = "https://www.fantastick.in/cdn/shop/files/CAMB011.jpg?v=1695123269&width=1946";
 
@@ -48,7 +48,7 @@ const songUploadController = async (req, res) => {
       posterUrl = results[1].url;
     }
 
-    // 💾 Save in DB
+ 
     const song = await songModel.create({
       title: tags.title || "Unknown",
       url: songFile.url,
