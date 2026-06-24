@@ -23,7 +23,7 @@ app.get('/favicon.png', (req, res) => res.status(204).end());
 
 // Routers
 const userRouter = require("./routes/user.routes");
-const Router = require("./routes/song.routes");
+const songRouter = require("./routes/song.routes");
 
 app.use("/", userRouter);
 app.use("/", songRouter);
