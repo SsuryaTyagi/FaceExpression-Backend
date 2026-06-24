@@ -26,6 +26,6 @@ const userRouter = require("./routes/user.routes");
 const Router = require("./routes/song.routes");
 
 app.use("/", userRouter);
-app.use("/", Router);
+app.use("/", songRouter);
 
 module.exports = app;
