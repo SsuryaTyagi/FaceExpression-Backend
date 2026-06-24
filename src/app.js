@@ -22,4 +22,8 @@ const Router = require("./routes/song.routes");
 app.use("/", userRouter)
 app.use("/",Router)
 
+app.get('/', (req, res) => {
+  res.status(200).json({ status: 'ok', message: 'Face expression backend is running' });
+});
+
 module.exports = app
