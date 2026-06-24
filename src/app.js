@@ -18,6 +18,9 @@ app.get('/', (req, res) => {
   res.status(200).json({ status: 'ok', message: 'Face expression backend is running' });
 });
 
+app.get('/favicon.ico', (req, res) => res.status(204).end());
+app.get('/favicon.png', (req, res) => res.status(204).end());
+
 // Routers
 const userRouter = require("./routes/user.routes");
 const Router = require("./routes/song.routes");
