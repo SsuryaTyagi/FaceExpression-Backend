@@ -1,13 +1,16 @@
-require("dotenv").config();
 const mongoose = require("mongoose");
 
+let isConnected = false;
+
 const connectToDb = async () => {
-  await mongoose
-    .connect(process.env.MONGOOSE)
-    .then(() => console.log("Database is connected.."))
-    .catch(() => {
-      console.log("data base is not connected");
-    });
+  if (isConnected) return;
+
+  await mongoose.connect(process.env.MONGOOSE, {
+    serverSelectionTimeoutMS: 5000,
+  });
+
+  isConnected = true;
+  console.log("Database is connected..");
 };
 
 module.exports = connectToDb;
