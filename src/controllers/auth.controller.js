@@ -7,6 +7,7 @@ const {
   verifyVerificationToken,
 } = require("../utils/generateToken");
 const redis = require("../config/cache");
+const { setAuthCookie, clearAuthCookie } = require("../utils/cookieOptions.js");
 
 const registerController = async (req, res) => {
   try {
@@ -78,7 +79,7 @@ const loginController = async (req, res) => {
     // console.log("User:", User);
     // console.log("Verified Value:", User.verified);
     // console.log("Type:", typeof User.verified);
-    
+
     if (!User.verified) {
       return res
         .status(403)
@@ -94,12 +95,7 @@ const loginController = async (req, res) => {
     }
 
     const token = generateToken(User);
-    res.cookie("token", token, {
-      httpOnly: true,
-      sameSite: "lax",
-      secure: false,
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
+    setAuthCookie(res, token);
 
     res.status(200).json({
       message: "user successfully login",
@@ -127,7 +123,7 @@ const getMe = async (req, res) => {
 const logout = async (req, res) => {
   const token = req.cookies.token;
 
-  res.clearCookie("token");
+  clearAuthCookie(res);
 
   await redis.set(token, Date.now().toString());
 
