@@ -31,6 +31,9 @@ const registerController = async (req, res) => {
       });
     }
 
+    console.log("password from body:", password);
+    console.log("User.password from DB:", User.password);
+
     const hashPassword = await bcrypt.hash(password, 10);
 
     const user = await userModel.create({
