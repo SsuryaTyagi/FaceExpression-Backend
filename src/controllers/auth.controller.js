@@ -31,9 +31,6 @@ const registerController = async (req, res) => {
       });
     }
 
-    console.log("password from body:", password);
-    console.log("User.password from DB:", User.password);
-
     const hashPassword = await bcrypt.hash(password, 10);
 
     const user = await userModel.create({
@@ -88,6 +85,9 @@ const loginController = async (req, res) => {
         .status(403)
         .json({ message: "Please verify your email before logging in." });
     }
+
+    console.log("password from body:", password);
+    console.log("User.password from DB:", User.password);
 
     const validPass = await bcrypt.compare(password, User.password);
 
