@@ -86,6 +86,13 @@ const loginController = async (req, res) => {
         .json({ message: "Please verify your email before logging in." });
     }
 
+    if (!User.password) {
+      return res.status(400).json({
+        message:
+          "This account was created using Google or GitHub. Please log in using that method.",
+      });
+    }
+
     console.log("password from body:", password);
     console.log("User.password from DB:", User.password);
 
